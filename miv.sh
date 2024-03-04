@@ -66,10 +66,10 @@ function print_file(){
 function insert_line(){
     local counter=0
     while IFS= read -r line; do
-        if [[ ! $1 -eq $counter ]];then
+        if [[ ! "$1" -eq $counter ]];then
             echo $line >> $temp_file_name
         else
-            echo $2 >> $temp_file_name
+            echo "$2" >> $temp_file_name
             echo $line >> $temp_file_name
         fi
         ((counter++))
@@ -77,13 +77,17 @@ function insert_line(){
     mv -f $temp_file_name $file
 }
 
+function insert_line_end(){
+    echo "$1" >> $file
+}
+
 function update_line(){
     local counter=0
     while IFS= read -r line; do
-        if [[ ! $1 -eq $counter ]];then
+        if [[ ! "$1" -eq $counter ]];then
             echo $line >> $temp_file_name
         else
-            echo $2 >> $temp_file_name
+            echo "$2" >> $temp_file_name
         fi
         ((counter++))
     done < $file
@@ -93,7 +97,7 @@ function update_line(){
 function delete_line(){
     local counter=0
     while IFS= read -r line; do
-        if [[ ! $1 -eq $counter ]];then
+        if [[ ! "$1" -eq $counter ]];then
             echo $line >> $temp_file_name
         fi
         ((counter++))
@@ -118,7 +122,7 @@ function set_env(){
                 shift 2
             ;;
             -l | --line)
-                line=$2
+                line="$2"
                 shift 2
             ;;
             -r | --read)
@@ -159,7 +163,11 @@ function set_env(){
             print_file
         ;;
         1)
-            insert_line "$line" "$content"
+            if [[ $end_f ]]; then
+                insert_line_end "$content"
+            else
+                insert_line "$line" "$content"
+            fi
             print_file
         ;;
         2)
@@ -167,7 +175,11 @@ function set_env(){
             print_file
         ;;
         3)
-            delete_line "$line"
+            if [[ $end_f ]]; then
+                delete_line_end
+            else
+                delete_line "$line"
+            fi
             print_file
         ;;
         *)
