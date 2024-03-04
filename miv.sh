@@ -21,13 +21,15 @@ function show_help(){
     echo "  -i, --insert TEXT       Insert new text at the specified line."
     echo "  -u, --update TEXT       Update the text at the specified line."
     echo "  -d, --delete            Delete the specified line."
-    echo "  -e                      [Optional] At the end, remove any temporary files created."
+    echo "  -e                      Make the changes at the end of the file"
     echo
     echo "Examples:"
     echo "  script_name -f file.txt -r"
     echo "  script_name -f file.txt -l 5 -i 'New text'"
     echo "  script_name -f file.txt -l 3 -u 'Updated text'"
     echo "  script_name -f file.txt -l 7 -d"
+    echo "  script_name -f file.txt -e -i 'New text'"
+    echo "  script_name -f file.txt -e -d"
     echo
     echo "For more details, consult the documentation."
 }
